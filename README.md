@@ -10,6 +10,10 @@ The story begins when Datum (an android) and Sir William ("Wills", a robotic dog
 
 The game is played from the perspective of Datum.
 
+![Prototype for wills robot](https://raw.github.com/davidmason/datum-and-wills/master/prototypes/wills-prototype.png)
+Prototype for Sir William made at voxelbuilder.com, see [interactive Wills model on voxelbuilder.com](http://voxelbuilder.com/#A/dlkkUhUhUhcheYhYhZhhdehfYfbhhhSeXhhfShSeeieiYfYfSeYhYhedihShYfchfYfWheYhUfYfchfYfehifYfWffYhWhlYfWfhYhUfSaSkYfaffUfUfYfUhUhYfUfUfYfUhUhejffYfYfYfajiYfYfYfeiheYfYfaiiYfYfaffUfUfcfiUeUhcfhUfcfhUfYfcifcbichfYhceichfemfhYfYfcihYfYfaieYfYfcifYfYfejihYfYfedahSeUhUhWfiUhchiUfUfchhefhechfYfUfeneiSeefjiYhcffUfUfSeUhUhchhYfelhiYhafeYhafhYeYh:C/2ecc713498db34495ee67e22ecf0f1000000)
+
+
 ## Chapter 1
 Your circuits were damaged during the crash and you are malfunctioning. Sir William's parachute is hooked on a tree. Repair yourself as you journey over and rescue him.
 
