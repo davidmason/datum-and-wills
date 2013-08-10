@@ -43,6 +43,11 @@ avatar.pov(3)
 avatar.possess()
 avatar.yaw.position.set(2, 14, 4)
 
+window.story = {};
+window.story.errorOverlay = document.getElementsByClassName('error-overlay')[0];
+window.story.tutorial = document.getElementsByClassName('tutorial')[0];
+
+
 editor = document.getElementById('editor');
 //editor.onclick = function() {
 //    this.contentEditable='true';
@@ -52,7 +57,7 @@ editor.onchange = function() {
   console.log('updating moveForward')
   var functionBody = editor.value;
   //try {
-  var funcString = "var moveForward = function (target, speed, dt) {" + functionBody + "}"
+  var funcString = "var moveForward = function (robot, speed, dt) {" + functionBody + "}"
   eval(funcString);
   window.moveForward = moveForward;
   //} catch(e) {
@@ -63,7 +68,14 @@ editor.onchange = function() {
 };
 
 // do nothing initially...
-window.moveForward = function() { console.log('not implemented'); };
+window.moveForward = function() {
+  console.log('not implemented');
+  window.story.errorOverlay.style.display = 'block';
+  setTimeout(function () {
+      window.story.errorOverlay.style.display = 'none';
+      window.story.tutorial.style.display = 'block';
+  }, 2000)
+};
 
 function moveForwardFunction(target, speed, dt) {
   window.moveForward(target, speed, dt)
