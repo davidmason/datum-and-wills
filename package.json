@@ -6,7 +6,8 @@
   "dependencies": {
     "voxel-engine": "~0.18.4",
     "painterly-textures": "0.x.x",
-    "voxel-player": "0.1.x"
+    "voxel-player": "0.1.x",
+    "voxel-critter": "0.x.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

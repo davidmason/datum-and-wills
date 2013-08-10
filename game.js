@@ -45,24 +45,26 @@ avatar.yaw.position.set(2, 14, 4)
 
 window.story = {};
 window.story.errorOverlay = document.getElementsByClassName('error-overlay')[0];
-window.story.tutorial = document.getElementsByClassName('tutorial')[0];
-window.story.scriptError = document.getElementById('script-error');
+window.story.tutorial = document.getElementsByClassName('accordion')[0];
+window.story.walkError = document.getElementById('walk-error');
+window.story.jumpError = document.getElementById('jump-error');
 
 
-editor = document.getElementById('editor');
+window.story.walkCircuit = document.getElementById('walk-circuit');
 //editor.onclick = function() {
 //    this.contentEditable='true';
 //}
 
-editor.onchange = function() {
+window.story.walkCircuit.onchange = function() {
   console.log('updating moveForward')
-  var functionBody = editor.value;
+  // FIXME could be this.value
+  var functionBody = window.story.walkCircuit.value;
   try {
     var funcString = "var moveForward = function (robot, speed, dt) {" + functionBody + "}"
     eval(funcString);
     window.moveForward = moveForward;
-    window.story.scriptError.style.display = 'none';
-    window.story.scriptError.innerText = '';
+    window.story.walkError.style.display = 'none';
+    window.story.walkError.innerText = '';
   } catch(e) {
     handleWalkError(e);
   }
@@ -81,15 +83,29 @@ window.moveForward = function() {
 function moveForwardFunction(target, speed, dt) {
   try {
     window.moveForward(target, speed, dt);
-    window.story.scriptError.style.display = 'none';
-    window.story.scriptError.innerText = '';
+    window.story.walkError.style.display = 'none';
+    window.story.walkError.innerText = '';
   } catch(e) {
     handleWalkError(e);
   }
 }
 
 function handleWalkError(e) {
-  window.story.scriptError.innerText = e.message
-  window.story.scriptError.style.display = 'block';
+  window.story.walkError.innerText = e.message
+  window.story.walkError.style.display = 'block';
 }
+
+function decorateCircuits() {
+  var circuits = document.getElementsByClassName('circuit');
+  var i, status, circuit;
+  for (i = 0; i < circuits.length; i++) {
+    circuit = circuits[i];
+    status = circuit.insertBefore(document.createElement('div'), circuit.firstChild);
+    status.className = 'status';
+    status = circuit.appendChild(document.createElement('div'));
+    status.className = 'status';
+  }
+}
+
+decorateCircuits();
 
