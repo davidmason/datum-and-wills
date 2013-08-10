@@ -78,6 +78,15 @@
         content: "circuit damaged! warning!";
       }
 
+      #script-error {
+        color: red;
+        display: none;
+      }
+
+      #script-error:before {
+        content: "Error: ";
+      }
+
     </style>
   </head>
   <body>
@@ -102,6 +111,8 @@
         <textarea id="editor"></textarea>
         <div class="status"></div>
       </div>
+
+      <div id="script-error" />
     </div>
 
     <script type="text/javascript" src="game-compiled.js"></script>

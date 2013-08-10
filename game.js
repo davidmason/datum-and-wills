@@ -46,6 +46,7 @@ avatar.yaw.position.set(2, 14, 4)
 window.story = {};
 window.story.errorOverlay = document.getElementsByClassName('error-overlay')[0];
 window.story.tutorial = document.getElementsByClassName('tutorial')[0];
+window.story.scriptError = document.getElementById('script-error');
 
 
 editor = document.getElementById('editor');
@@ -56,15 +57,15 @@ editor = document.getElementById('editor');
 editor.onchange = function() {
   console.log('updating moveForward')
   var functionBody = editor.value;
-  //try {
-  var funcString = "var moveForward = function (robot, speed, dt) {" + functionBody + "}"
-  eval(funcString);
-  window.moveForward = moveForward;
-  //} catch(e) {
-  //  console.log('error updating moveForward');
-  //  console.log(e);
-  //  TODO inform user that there is something wrong with their script
-  //}
+  try {
+    var funcString = "var moveForward = function (robot, speed, dt) {" + functionBody + "}"
+    eval(funcString);
+    window.moveForward = moveForward;
+    window.story.scriptError.style.display = 'none';
+    window.story.scriptError.innerText = '';
+  } catch(e) {
+    handleWalkError(e);
+  }
 };
 
 // do nothing initially...
@@ -78,8 +79,17 @@ window.moveForward = function() {
 };
 
 function moveForwardFunction(target, speed, dt) {
-  window.moveForward(target, speed, dt)
+  try {
+    window.moveForward(target, speed, dt);
+    window.story.scriptError.style.display = 'none';
+    window.story.scriptError.innerText = '';
+  } catch(e) {
+    handleWalkError(e);
+  }
 }
 
-
+function handleWalkError(e) {
+  window.story.scriptError.innerText = e.message
+  window.story.scriptError.style.display = 'block';
+}
 
