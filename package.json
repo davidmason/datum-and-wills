@@ -1,0 +1,22 @@
+{
+  "name": "datum-and-wills",
+  "version": "0.0.0",
+  "description": "A narative browser-based voxel game that aims to introduce and teach javascript coding interactively",
+  "main": "index.js",
+  "dependencies": {
+    "voxel-engine": "~0.18.4",
+    "painterly-textures": "0.x.x",
+    "voxel-player": "0.1.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/davidmason/datum-and-wills.git"
+  },
+  "author": "David Mason @drdmason",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "09fc4895664b26b876b529b2bd3685815aa566c3"
+}
