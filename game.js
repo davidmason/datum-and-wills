@@ -10,7 +10,8 @@ var createGame = require('voxel-engine')
 var hud = {}
 window.hud = hud;
 
-hud.errorOverlay = document.getElementsByClassName('error-overlay')[0];
+hud.instructionOverlay = document.querySelector('.instruction-overlay');
+hud.errorOverlay = document.querySelector('.error-overlay');
 hud.tutorial = document.getElementsByClassName('accordion')[0];
 hud.walkError = document.getElementById('walk-error');
 hud.jumpError = document.getElementById('jump-error');
@@ -57,6 +58,20 @@ hud.bindAccordionItems = function () {
 }
 
 hud.bindAccordionItems();
+
+hud.showInstruction = function (message) {
+  var overlay = hud.instructionOverlay
+  overlay.style.display = 'block';
+  overlay.innerText = message;
+  if (hud.clearInstructionsTimeout)
+    hud.clearInstructionsTimeout = null
+  hud.clearInstructionsTimeout = setTimeout(hud.clearInstructions, 4000)
+}
+
+hud.clearInstructions = function () {
+  hud.clearInstructionsTimeout = null;
+  hud.instructionOverlay.style.display = 'none';
+}
 
 hud.showError = function (message) {
   var errorOverlay = hud.errorOverlay;
@@ -179,6 +194,8 @@ trigger(game.spatial, triggers.atJumpObstacle)
     console.log('at obstacle')
     // TODO trigger next phase
     // show message 'press spacebar to jump'
+    hud.showInstruction('Press [spacebar] to jump')
+
     // add function for jump handler (make default function inert)
         // show error about jump circit (recycle error component, set its text)
         // timeout remove hidden attribute from challenge

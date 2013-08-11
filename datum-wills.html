@@ -10,15 +10,22 @@
         overflow: hidden;
       }
 
-      .error-overlay {
+      .text-overlay {
         background-color: rgba(0, 0, 0, 0.3);
         position: absolute;
-        bottom: 250px;
         left: 400px;
-        color: red;
         font-size: 2em;
         padding: 8px;
         display: none;
+      }
+
+      .instruction-overlay {
+        bottom: 250px;
+      }
+
+      .error-overlay {
+        color: red;
+        bottom: 200px;
       }
 
       .accordion {
@@ -110,7 +117,10 @@
   <body>
     <div id="container"></div>
 
-    <div class="error-overlay">
+    <div class="text-overlay instruction-overlay">
+    </div>
+
+    <div class="text-overlay error-overlay">
     </div>
 
     <ul class="accordion" style="top: 10px;">
