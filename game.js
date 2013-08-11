@@ -4,6 +4,7 @@ var createGame = require('voxel-engine')
   , trigger = require('spatial-trigger')
   , aabb = require('aabb-3d')
   , spatialEvents = require('spatial-events')
+  , walk = require('voxel-walk')
 
 
 
@@ -246,6 +247,14 @@ var avatar = createPlayer('player.png')
 avatar.pov(3)
 avatar.possess()
 avatar.yaw.position.set(0, 2, 10)
+
+game.on('tick', function() {
+  walk.render(avatar.playerSkin)
+  var vx = Math.abs(avatar.velocity.x)
+  var vz = Math.abs(avatar.velocity.z)
+  if (vx > 0.001 || vz > 0.001) walk.stopWalking()
+  else walk.startWalking()
+})
 
 
 var triggers = {
