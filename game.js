@@ -169,15 +169,12 @@ avatar.yaw.position.set(0, 2, 10)
 
 
 var triggers = {
-    walkTrigger: aabb([-5, 1, 6], [11, 1, 3])
+    atJumpObstacle: aabb([-5, 1, 6], [11, 1, 3])
+  , atStrafeObstacle: aabb([-5, 3, 0], [11, 1, 3])
 }
-world.triggers = triggers
+window.triggers = triggers
 
-//triggers.walkTrigger = aabb([-5, 1, 6], [11, 1, 3])
-
-// var eventEmitter = new spatialEvents()
-//trigger(eventEmitter, walkTrigger, 'point')
-trigger(game.spatial, triggers.walkTrigger)
+trigger(game.spatial, triggers.atJumpObstacle)
   .on('enter', function() {
     console.log('at obstacle')
     // TODO trigger next phase
@@ -187,7 +184,9 @@ trigger(game.spatial, triggers.walkTrigger)
         // timeout remove hidden attribute from challenge
   })
 
-game.addAABBMarker(triggers.walkTrigger)
+for (var triggerName in triggers) {
+  game.addAABBMarker(triggers[triggerName])
+}
 
 
 
