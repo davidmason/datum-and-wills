@@ -170,6 +170,7 @@ code.inert = function () {
 
 code.jumpError = function () {
   hud.showError("Error! Jumping circuit broken!");
+  setTimeout(hud.showJumpTutorial, 2000)
 }
 
 code.jump = code.inert
@@ -269,8 +270,6 @@ trigger(game.spatial, triggers.atJumpObstacle).on('enter', function() {
   if (code.jump === code.inert) {
       code.jump = code.jumpError
   }
-
-  setTimeout(hud.showJumpTutorial, 2000)
 })
 
 trigger(game.spatial, triggers.atStrafeObstacle).on('enter', function () {
