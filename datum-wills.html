@@ -131,7 +131,7 @@
             My primary walking control circuits are damaged. I will have to re-route
             my walking control functions through my auxiliary circuits.
             <div class="circuit damaged-circuit">
-              <span>robot.velocity.z = -0.01;</span>
+              <span>robot.speed.forward = 1;</span>
             </div>
             <div class="circuit intact-circuit">
               <textarea id="walk-circuit"></textarea>
@@ -146,7 +146,7 @@
           My jumping control circuit is damaged. I can re-route my jumping control
           function through another auxiliary circuit.
             <div class="circuit damaged-circuit">
-              <span>robot.velocity.z = -0.01;</span>
+              <span>robot.speed.up = 2;</span>
             </div>
             <div class="circuit intact-circuit">
               <textarea id="jump-circuit"></textarea>

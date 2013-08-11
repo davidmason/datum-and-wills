@@ -142,8 +142,15 @@ code.moveForwardError = function() {
 code.moveForward = code.moveForwardError;
 
 code.moveForwardWrapper = function(target, speed, dt) {
+  var robot = {
+    speed: {
+      forward: target.velocity.z * -100
+    }
+  }
   try {
-    code.moveForward(target, speed, dt);
+    code.moveForward(robot, speed, dt);
+    target.velocity.z = robot.speed.forward / -100
+
     hud.walkError.style.display = 'none';
     hud.walkError.innerText = '';
   } catch(e) {
@@ -167,10 +174,18 @@ code.jumpError = function () {
 code.jump = code.inert
 
 code.jumpWrapper = function(target, dt) {
-  console.log('jumpWrapper(...)')
-  console.log(target)
+  // TODO consider providing more than just y
+  // could also make a function to convert a target to a robot
+  // and another for the reverse
+  var robot = {
+    speed: {
+      up: target.velocity.y * 100
+    }
+  }
   try {
-    code.jump(target, dt);
+    code.jump(robot, dt);
+    target.velocity.y = robot.speed.up / 100
+
     hud.jumpError.style.display = 'none';
     hud.jumpError.innerText = '';
   } catch(e) {
@@ -235,7 +250,7 @@ avatar.yaw.position.set(0, 2, 10)
 
 var triggers = {
     atJumpObstacle: aabb([-5, 1, 6], [11, 1, 3])
-  , atStrafeObstacle: aabb([-5, 3, 0], [11, 1, 3])
+  , atStrafeObstacle: aabb([-5, 3, 0], [11, 1, 6])
 }
 window.triggers = triggers
 
@@ -249,7 +264,11 @@ trigger(game.spatial, triggers.atJumpObstacle).on('enter', function() {
   setTimeout(hud.showJumpTutorial, 2000)
 })
 
-// TODO add change handler to jump circuit
+trigger(game.spatial, triggers.atStrafeObstacle).on('enter', function () {
+  hud.jumpTutorial.classList.add('complete')
+  // TODO next challenge
+})
+
 
 
 for (var triggerName in triggers) {
