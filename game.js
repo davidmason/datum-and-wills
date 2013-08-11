@@ -12,7 +12,9 @@ window.hud = hud;
 
 hud.instructionOverlay = document.querySelector('.instruction-overlay');
 hud.errorOverlay = document.querySelector('.error-overlay');
-hud.tutorial = document.getElementsByClassName('accordion')[0];
+hud.tutorial = document.querySelector('.accordion');
+hud.walkTutorial = document.getElementsByClassName('accordion-item')[0];
+hud.jumpTutorial = document.getElementsByClassName('accordion-item')[1];
 hud.walkError = document.getElementById('walk-error');
 hud.jumpError = document.getElementById('jump-error');
 
@@ -85,6 +87,12 @@ hud.showError = function (message) {
 
 hud.showTutorials = function () {
   hud.tutorial.style.display = 'block';
+}
+
+hud.showJumpTutorial = function () {
+  hud.jumpTutorial.classList.remove('hidden')
+  hud.accordion.collapseAll();
+  hud.jumpTutorial.classList.add('active');
 }
 
 hud.clearError = function () {
@@ -192,11 +200,12 @@ window.triggers = triggers
 trigger(game.spatial, triggers.atJumpObstacle)
   .on('enter', function() {
     console.log('at obstacle')
-    // TODO trigger next phase
-    // show message 'press spacebar to jump'
-    hud.showInstruction('Press [spacebar] to jump')
 
-    // add function for jump handler (make default function inert)
+    hud.walkTutorial.classList.add('complete')
+    hud.showInstruction('Press [spacebar] to jump')
+    setTimeout(hud.showJumpTutorial, 2000)
+
+    // TODO add function for jump handler (make default function inert)
         // show error about jump circit (recycle error component, set its text)
         // timeout remove hidden attribute from challenge
   })
