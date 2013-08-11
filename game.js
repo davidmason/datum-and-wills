@@ -6,48 +6,6 @@ var createGame = require('voxel-engine')
   , spatialEvents = require('spatial-events')
 
 
-var Material = {
-    SKY: 0
-  , GRASS: 1
-  , BRICK: 2
-  , DIRT: 3
-}
-
-var coordinatesInRange = function (x, z, range) {
-    return x < range && x > -range && z < range && z > -range;
-}
-
-var dirtColumnWithBrickCube = function(x, y, z) {
-    var canyonWall = (x > 5 || x < -5) && y > 0 && y < 10;
-    var inMiddle = coordinatesInRange(x, z, 6);
-    var inRange = coordinatesInRange(x, z, 30);
-    var underground = y < 0;
-    var surface = y === 0;
-    var aboveGround = y > 0;
-    var highUp = y > 2;
-    
-    if (canyonWall && inRange) return Material.DIRT;
-    if (inMiddle && aboveGround && !highUp) return Material.DIRT;
-    if (surface && inRange) return Material.GRASS;
-    if (underground && inRange) return Material.DIRT;
-    return Material.SKY;
-}
-
-var game = createGame({
-  texturePath: texturePath
-, generate: dirtColumnWithBrickCube
-, controls: {
-    moveForward: moveForwardFunction
-  }
-});
-game.appendTo(document.body);
-window.game = game; // for easy debugging
-
-var createPlayer = player(game)
-var avatar = createPlayer('player.png')
-avatar.pov(3)
-avatar.possess()
-avatar.yaw.position.set(0, 2, 10)
 
 var hud = {}
 window.hud = hud;
@@ -65,16 +23,16 @@ hud.walkCircuit.onchange = function() {
   try {
     var funcString = "var moveForward = function (robot, speed, dt) {" + functionBody + "}"
     eval(funcString);
-    window.moveForward = moveForward;
+    code.moveForward = moveForward;
     hud.walkError.style.display = 'none';
     hud.walkError.innerText = '';
   } catch(e) {
-    handleWalkError(e);
+    code.handleWalkError(e);
   }
 };
 
 
-function bindAccordionItems() {
+hud.bindAccordionItems = function () {
   hud.accordion = document.querySelector('.accordion');
   hud.accordionItems = hud.accordion.querySelectorAll('.accordion-item');
   hud.accordion.collapseAll = function () {
@@ -98,58 +56,28 @@ function bindAccordionItems() {
   }
 }
 
-bindAccordionItems();
+hud.bindAccordionItems();
 
-
-
-// do nothing initially...
-window.moveForward = function() {
-  console.log('not implemented');
+hud.showError = function (message) {
   var errorOverlay = hud.errorOverlay;
   errorOverlay.style.display = 'block';
-  errorOverlay.innerText = "Error! Walking circuit damaged!";
-  setTimeout(function () {
-      errorOverlay.style.display = 'none';
-      hud.tutorial.style.display = 'block';
-  }, 2000)
-};
-
-function moveForwardFunction(target, speed, dt) {
-  try {
-    window.moveForward(target, speed, dt);
-    hud.walkError.style.display = 'none';
-    hud.walkError.innerText = '';
-  } catch(e) {
-    handleWalkError(e);
-  }
+  errorOverlay.innerText = message;
+  setTimeout(hud.showTutorials, 2200)
+  if (hud.clearErrorTimeoutHandle)
+    clearTimeout(hud.clearErrorTimeoutHandle)
+  hud.clearErrorTimeoutHandle = setTimeout(hud.clearError, 2000)
 }
 
-function handleWalkError(e) {
-  hud.walkError.innerText = e.message
-  hud.walkError.style.display = 'block';
+hud.showTutorials = function () {
+  hud.tutorial.style.display = 'block';
 }
 
+hud.clearError = function () {
+  hud.clearErrorTimeoutHandle = null;
+  hud.errorOverlay.style.display = 'none';
+}
 
-
-
-var walkTrigger = aabb([-5, 1, 6], [11, 1, 3])
-
-// var eventEmitter = new spatialEvents()
-//trigger(eventEmitter, walkTrigger, 'point')
-trigger(game.spatial, walkTrigger)
-  .on('enter', function() {
-    console.log('at obstacle')
-    // TODO trigger next phase
-    // show message 'press spacebar to jump'
-    // add function for jump handler (make default function inert)
-        // show error about jump circit (recycle error component, set its text)
-        // timeout remove hidden attribute from challenge
-  })
-
-game.addAABBMarker(walkTrigger)
-
-
-function decorateCircuits() {
+hud.decorateCircuits = function () {
   var circuits = document.getElementsByClassName('circuit');
   var i, status, circuit;
   for (i = 0; i < circuits.length; i++) {
@@ -161,5 +89,105 @@ function decorateCircuits() {
   }
 }
 
-decorateCircuits();
+hud.decorateCircuits();
+
+
+
+window.code = {}
+code = window.code
+code.moveForwardError = function() {
+  hud.showError("Error! Walking circuit damaged!");
+};
+
+code.moveForward = code.moveForwardError;
+
+code.moveForwardWrapper = function(target, speed, dt) {
+  try {
+    code.moveForward(target, speed, dt);
+    hud.walkError.style.display = 'none';
+    hud.walkError.innerText = '';
+  } catch(e) {
+    code.handleWalkError(e);
+  }
+}
+
+code.handleWalkError = function (e) {
+  hud.walkError.innerText = e.message
+  hud.walkError.style.display = 'block';
+}
+
+
+
+
+window.world = {}
+world = window.world
+
+
+world.Material = {
+    SKY: 0
+  , GRASS: 1
+  , BRICK: 2
+  , DIRT: 3
+}
+
+var coordinatesInRange = function (x, z, range) {
+    return x < range && x > -range && z < range && z > -range;
+}
+
+var dirtColumnWithBrickCube = function(x, y, z) {
+    var Material = world.Material
+    var canyonWall = (x > 5 || x < -5) && y > 0 && y < 10;
+    var inMiddle = coordinatesInRange(x, z, 6);
+    var inRange = coordinatesInRange(x, z, 30);
+    var underground = y < 0;
+    var surface = y === 0;
+    var aboveGround = y > 0;
+    var highUp = y > 2;
+
+    if (canyonWall && inRange) return Material.DIRT;
+    if (inMiddle && aboveGround && !highUp) return Material.DIRT;
+    if (surface && inRange) return Material.GRASS;
+    if (underground && inRange) return Material.DIRT;
+    return Material.SKY;
+}
+
+var game = createGame({
+  texturePath: texturePath
+, generate: dirtColumnWithBrickCube
+, controls: {
+    moveForward: code.moveForwardWrapper
+  }
+});
+game.appendTo(document.body);
+window.game = game; // for easy debugging
+
+var createPlayer = player(game)
+var avatar = createPlayer('player.png')
+avatar.pov(3)
+avatar.possess()
+avatar.yaw.position.set(0, 2, 10)
+
+
+var triggers = {
+    walkTrigger: aabb([-5, 1, 6], [11, 1, 3])
+}
+world.triggers = triggers
+
+//triggers.walkTrigger = aabb([-5, 1, 6], [11, 1, 3])
+
+// var eventEmitter = new spatialEvents()
+//trigger(eventEmitter, walkTrigger, 'point')
+trigger(game.spatial, triggers.walkTrigger)
+  .on('enter', function() {
+    console.log('at obstacle')
+    // TODO trigger next phase
+    // show message 'press spacebar to jump'
+    // add function for jump handler (make default function inert)
+        // show error about jump circit (recycle error component, set its text)
+        // timeout remove hidden attribute from challenge
+  })
+
+game.addAABBMarker(triggers.walkTrigger)
+
+
 
