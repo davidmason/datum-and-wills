@@ -285,3 +285,17 @@ for (var triggerName in triggers) {
 
 
 
+var critterCreator = require('voxel-critter')(game);
+
+var img = new Image();
+img.onload = function() {
+  var wills = critterCreator(img);
+
+  wills.position.clone(game.controls.target().avatar.position);
+  wills.position.z -= 4;
+  wills.position.y += 10;
+
+};
+img.src = 'wills.png';
+
+
