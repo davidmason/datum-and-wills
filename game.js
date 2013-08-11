@@ -139,7 +139,24 @@ code.handleWalkError = function (e) {
   hud.walkError.style.display = 'block';
 }
 
+code.inert = function () {
+  console.log('not implemented')
+}
 
+code.jumpError = function () {
+  hud.showError("Error! Jumping circuit broken!");
+}
+
+code.jump = code.inert
+
+code.jumpWrapper = function(target, dt) {
+  try {
+    code.jump(target, dt);
+    // clear jump error
+  } catch(e) {
+    // handle jump error
+  }
+}
 
 
 window.world = {}
@@ -178,7 +195,8 @@ var game = createGame({
   texturePath: texturePath
 , generate: dirtColumnWithBrickCube
 , controls: {
-    moveForward: code.moveForwardWrapper
+    moveForward: code.moveForwardWrapper,
+    jump: code.jumpWrapper
   }
 });
 game.appendTo(document.body);
@@ -197,18 +215,16 @@ var triggers = {
 }
 window.triggers = triggers
 
-trigger(game.spatial, triggers.atJumpObstacle)
-  .on('enter', function() {
-    console.log('at obstacle')
+trigger(game.spatial, triggers.atJumpObstacle).on('enter', function() {
+  hud.walkTutorial.classList.add('complete')
+  hud.showInstruction('Press [spacebar] to jump')
+  code.jump = code.jumpError
 
-    hud.walkTutorial.classList.add('complete')
-    hud.showInstruction('Press [spacebar] to jump')
-    setTimeout(hud.showJumpTutorial, 2000)
+  setTimeout(hud.showJumpTutorial, 2000)
+})
 
-    // TODO add function for jump handler (make default function inert)
-        // show error about jump circit (recycle error component, set its text)
-        // timeout remove hidden attribute from challenge
-  })
+// TODO add change handler to jump circuit
+
 
 for (var triggerName in triggers) {
   game.addAABBMarker(triggers[triggerName])
