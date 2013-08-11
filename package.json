@@ -5,6 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "voxel-engine": "~0.18.4",
+    "aabb-3d": "0.x.x",
+    "gl-matrix": "2.x.x",
+    "spatial-events": "0.0.1",
+    "spatial-trigger": "0.0.x",
     "painterly-textures": "0.x.x",
     "voxel-player": "0.1.x",
     "voxel-critter": "0.x.x"

@@ -1,6 +1,10 @@
-var createGame = require('voxel-engine');
-var player = require('voxel-player')
-var texturePath = require('painterly-textures')(__dirname)
+var createGame = require('voxel-engine')
+  , player = require('voxel-player')
+  , texturePath = require('painterly-textures')(__dirname)
+  , trigger = require('spatial-trigger')
+  , aabb = require('aabb-3d')
+  , spatialEvents = require('spatial-events')
+
 
 var Material = {
     SKY: 0
@@ -45,23 +49,25 @@ avatar.pov(3)
 avatar.possess()
 avatar.yaw.position.set(0, 2, 10)
 
-window.story = {};
-window.story.errorOverlay = document.getElementsByClassName('error-overlay')[0];
-window.story.tutorial = document.getElementsByClassName('accordion')[0];
-window.story.walkError = document.getElementById('walk-error');
-window.story.jumpError = document.getElementById('jump-error');
+var hud = {}
+window.hud = hud;
 
-window.story.walkCircuit = document.getElementById('walk-circuit');
-window.story.walkCircuit.onchange = function() {
+hud.errorOverlay = document.getElementsByClassName('error-overlay')[0];
+hud.tutorial = document.getElementsByClassName('accordion')[0];
+hud.walkError = document.getElementById('walk-error');
+hud.jumpError = document.getElementById('jump-error');
+
+hud.walkCircuit = document.getElementById('walk-circuit');
+hud.walkCircuit.onchange = function() {
   console.log('updating moveForward')
   // FIXME could be this.value
-  var functionBody = window.story.walkCircuit.value;
+  var functionBody = hud.walkCircuit.value;
   try {
     var funcString = "var moveForward = function (robot, speed, dt) {" + functionBody + "}"
     eval(funcString);
     window.moveForward = moveForward;
-    window.story.walkError.style.display = 'none';
-    window.story.walkError.innerText = '';
+    hud.walkError.style.display = 'none';
+    hud.walkError.innerText = '';
   } catch(e) {
     handleWalkError(e);
   }
@@ -69,23 +75,23 @@ window.story.walkCircuit.onchange = function() {
 
 
 function bindAccordionItems() {
-  window.story.accordion = document.querySelector('.accordion');
-  window.story.accordionItems = window.story.accordion.querySelectorAll('.accordion-item');
-  window.story.accordion.collapseAll = function () {
+  hud.accordion = document.querySelector('.accordion');
+  hud.accordionItems = hud.accordion.querySelectorAll('.accordion-item');
+  hud.accordion.collapseAll = function () {
     var items = this.querySelectorAll('.accordion-item');
     for (var i = 0; i < items.length; i++) {
       items[i].classList.remove('active');
     }
   };
   var i;
-  for (i = 0; i < window.story.accordionItems.length; i++) {
-    var item = window.story.accordionItems[i];
+  for (i = 0; i < hud.accordionItems.length; i++) {
+    var item = hud.accordionItems[i];
     item.querySelector('.accordion-title').onclick = function () {
       var parent = this.parentElement
       if (parent.classList.contains('active')) {
         parent.classList.remove('active');
       } else {
-        window.story.accordion.collapseAll();
+        hud.accordion.collapseAll();
         parent.classList.add('active');
       }
     };
@@ -95,30 +101,53 @@ function bindAccordionItems() {
 bindAccordionItems();
 
 
+
 // do nothing initially...
 window.moveForward = function() {
   console.log('not implemented');
-  window.story.errorOverlay.style.display = 'block';
+  var errorOverlay = hud.errorOverlay;
+  errorOverlay.style.display = 'block';
+  errorOverlay.innerText = "Error! Walking circuit damaged!";
   setTimeout(function () {
-      window.story.errorOverlay.style.display = 'none';
-      window.story.tutorial.style.display = 'block';
+      errorOverlay.style.display = 'none';
+      hud.tutorial.style.display = 'block';
   }, 2000)
 };
 
 function moveForwardFunction(target, speed, dt) {
   try {
     window.moveForward(target, speed, dt);
-    window.story.walkError.style.display = 'none';
-    window.story.walkError.innerText = '';
+    hud.walkError.style.display = 'none';
+    hud.walkError.innerText = '';
   } catch(e) {
     handleWalkError(e);
   }
 }
 
 function handleWalkError(e) {
-  window.story.walkError.innerText = e.message
-  window.story.walkError.style.display = 'block';
+  hud.walkError.innerText = e.message
+  hud.walkError.style.display = 'block';
 }
+
+
+
+
+var walkTrigger = aabb([-5, 1, 6], [11, 1, 3])
+
+// var eventEmitter = new spatialEvents()
+//trigger(eventEmitter, walkTrigger, 'point')
+trigger(game.spatial, walkTrigger)
+  .on('enter', function() {
+    console.log('at obstacle')
+    // TODO trigger next phase
+    // show message 'press spacebar to jump'
+    // add function for jump handler (make default function inert)
+        // show error about jump circit (recycle error component, set its text)
+        // timeout remove hidden attribute from challenge
+  })
+
+game.addAABBMarker(walkTrigger)
+
 
 function decorateCircuits() {
   var circuits = document.getElementsByClassName('circuit');
