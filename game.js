@@ -34,6 +34,23 @@ hud.walkCircuit.onchange = function() {
   }
 };
 
+// TODO de-duplicate handling of walk and jump here
+hud.jumpCircuit = document.querySelector('#jump-circuit')
+hud.jumpCircuit.onchange = function() {
+  console.log('updating jump')
+  var functionBody = hud.jumpCircuit.value;
+  try {
+    var funcString = "var jump = function (robot, dt) {" + functionBody + "}"
+    console.log(funcString)
+    eval(funcString);
+    console.log(jump)
+    code.jump = jump;
+    hud.jumpError.style.display = 'none';
+    hud.jumpError.innerText = '';
+  } catch(e) {
+    code.handleJumpError(e);
+  }
+}
 
 hud.bindAccordionItems = function () {
   hud.accordion = document.querySelector('.accordion');
@@ -150,14 +167,21 @@ code.jumpError = function () {
 code.jump = code.inert
 
 code.jumpWrapper = function(target, dt) {
+  console.log('jumpWrapper(...)')
+  console.log(target)
   try {
     code.jump(target, dt);
-    // clear jump error
+    hud.jumpError.style.display = 'none';
+    hud.jumpError.innerText = '';
   } catch(e) {
-    // handle jump error
+    code.handleJumpError(e)
   }
 }
 
+code.handleJumpError = function(e) {
+  hud.jumpError.innerText = e.message
+  hud.jumpError.style.display = 'block';
+}
 
 window.world = {}
 world = window.world
@@ -218,7 +242,9 @@ window.triggers = triggers
 trigger(game.spatial, triggers.atJumpObstacle).on('enter', function() {
   hud.walkTutorial.classList.add('complete')
   hud.showInstruction('Press [spacebar] to jump')
-  code.jump = code.jumpError
+  if (code.jump === code.inert) {
+      code.jump = code.jumpError
+  }
 
   setTimeout(hud.showJumpTutorial, 2000)
 })
