@@ -14,14 +14,16 @@ var coordinatesInRange = function (x, z, range) {
 }
 
 var dirtColumnWithBrickCube = function(x, y, z) {
-    var inMiddle = coordinatesInRange(x, z, 3);
+    var canyonWall = (x > 5 || x < -5) && y > 0 && y < 10;
+    var inMiddle = coordinatesInRange(x, z, 6);
     var inRange = coordinatesInRange(x, z, 30);
     var underground = y < 0;
     var surface = y === 0;
     var aboveGround = y > 0;
-    var highUp = y > 5;
+    var highUp = y > 2;
     
-    if (inMiddle && aboveGround && !highUp) return Material.BRICK;
+    if (canyonWall && inRange) return Material.DIRT;
+    if (inMiddle && aboveGround && !highUp) return Material.DIRT;
     if (surface && inRange) return Material.GRASS;
     if (underground && inRange) return Material.DIRT;
     return Material.SKY;
@@ -41,7 +43,7 @@ var createPlayer = player(game)
 var avatar = createPlayer('player.png')
 avatar.pov(3)
 avatar.possess()
-avatar.yaw.position.set(2, 14, 4)
+avatar.yaw.position.set(0, 2, 10)
 
 window.story = {};
 window.story.errorOverlay = document.getElementsByClassName('error-overlay')[0];
@@ -49,12 +51,7 @@ window.story.tutorial = document.getElementsByClassName('accordion')[0];
 window.story.walkError = document.getElementById('walk-error');
 window.story.jumpError = document.getElementById('jump-error');
 
-
 window.story.walkCircuit = document.getElementById('walk-circuit');
-//editor.onclick = function() {
-//    this.contentEditable='true';
-//}
-
 window.story.walkCircuit.onchange = function() {
   console.log('updating moveForward')
   // FIXME could be this.value
@@ -69,6 +66,34 @@ window.story.walkCircuit.onchange = function() {
     handleWalkError(e);
   }
 };
+
+
+function bindAccordionItems() {
+  window.story.accordion = document.querySelector('.accordion');
+  window.story.accordionItems = window.story.accordion.querySelectorAll('.accordion-item');
+  window.story.accordion.collapseAll = function () {
+    var items = this.querySelectorAll('.accordion-item');
+    for (var i = 0; i < items.length; i++) {
+      items[i].classList.remove('active');
+    }
+  };
+  var i;
+  for (i = 0; i < window.story.accordionItems.length; i++) {
+    var item = window.story.accordionItems[i];
+    item.querySelector('.accordion-title').onclick = function () {
+      var parent = this.parentElement
+      if (parent.classList.contains('active')) {
+        parent.classList.remove('active');
+      } else {
+        window.story.accordion.collapseAll();
+        parent.classList.add('active');
+      }
+    };
+  }
+}
+
+bindAccordionItems();
+
 
 // do nothing initially...
 window.moveForward = function() {
