@@ -1,132 +1,17 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-      <style type="text/css">
-      body {
-        font-family: Monospace;
-        font-size: 12px;
-        background-color: #f0f0f0;
-        margin: 0px;
-        overflow: hidden;
-      }
-
-      .text-overlay {
-        background-color: rgba(0, 0, 0, 0.3);
-        position: absolute;
-        left: 400px;
-        font-size: 2em;
-        padding: 8px;
-        display: none;
-      }
-
-      .instruction-overlay {
-        bottom: 250px;
-      }
-
-      .error-overlay {
-        color: red;
-        bottom: 200px;
-      }
-
-      .accordion {
-        position: absolute;
-        right: 30px;
-        width: 300px;
-        background-color: rgba(200, 200, 200, 0.85);
-        display: none;
-        padding: 0px 10px;
-      }
-
-      .accordion-item {
-        list-style: none;
-      }
-
-      .accordion-content {
-        border:  none;
-        font-size: 1.1em;
-        display: none;
-      }
-
-      .active .accordion-content {
-        display: block;
-      }
-
-      .complete .accordion-title {
-        color: #4a5;
-        border-top: 2px solid #aaa;
-        padding-top: 5px;
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      .circuit {
-        border:  none;
-        background-color: rgba(255, 255, 255, 0.5);
-        margin: 10px 0;
-      }
-
-      .circuit span {
-        display: block;
-        padding: 5px;
-      }
-
-      .circuit textarea {
-        width: 100%;
-        box-sizing: border-box;
-        border:  none;
-        background-color: rgba(255, 255, 255, 0);
-        padding: 5px 8px;
-      }
-
-      .damaged-circuit {
-        opacity: 0.7;
-        background-color: rgba(128, 128, 128, 0.5);
-      }
-
-      .status {
-        font-size: 0.8em;
-        padding: 8px;
-        opacity: 0.6;
-      }
-
-      .intact-circuit .status {
-        color: green;
-      }
-      .intact-circuit .status:before {
-        content: "circuit ok"
-      }
-
-      .damaged-circuit .status {
-        color: red;
-      }
-      .damaged-circuit .status:before {
-        content: "circuit damaged! warning!";
-      }
-
-      .script-error {
-        color: red;
-        display: none;
-      }
-
-      .script-error:before {
-        content: "Error: ";
-      }
-
-    </style>
+    <meta charset="UTF-8" />
+    <title>Datum and Wills</title>
+    <link rel="stylesheet" type="text/css" href="datum-wills.css" />
   </head>
+
   <body>
-    <div id="container"></div>
+    <div class="text-overlay instruction-overlay"></div>
+    <div class="text-overlay error-overlay"></div>
 
-    <div class="text-overlay instruction-overlay">
-    </div>
-
-    <div class="text-overlay error-overlay">
-    </div>
 
     <ul class="accordion" style="top: 10px;">
-
       <li class="accordion-item active">
         <h2 class="accordion-title">Walking</h2>
         <div class="accordion-content">
@@ -141,7 +26,6 @@
             <div class="script-error" id="walk-error" />
         </div>
       </li>
-
       <li class="accordion-item hidden">
         <h2 class="accordion-title">Jumping</h2>
         <div class="accordion-content">
@@ -156,9 +40,9 @@
             <div class="script-error" id="jump-error" />
         </div>
       </li>
-
     </ul>
 
+    <div id="container"></div>
 
     <script type="text/javascript" src="game-compiled.js"></script>
   </body>
