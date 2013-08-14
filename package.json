@@ -4,7 +4,7 @@
   "description": "A narative browser-based voxel game that aims to introduce and teach javascript coding interactively",
   "main": "index.js",
   "dependencies": {
-    "voxel-engine": "~0.18.4",
+    "voxel-engine": "git://github.com/davidmason/voxel-engine.git#master",
     "aabb-3d": "0.x.x",
     "gl-matrix": "2.x.x",
     "spatial-events": "0.0.1",
