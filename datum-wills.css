@@ -6,6 +6,18 @@
         overflow: hidden;
       }
 
+      .source-on-github, .source-on-github:visited {
+        color: #0099dd;
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        font-size: 1.2em;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 5px;
+        border-radius: 3px;
+        text-decoration: none;
+      }
+
       .text-overlay {
         background-color: rgba(0, 0, 0, 0.3);
         position: absolute;
