@@ -12,7 +12,7 @@
     "painterly-textures": "0.x.x",
     "voxel-player": "0.1.x",
     "voxel-walk": "0.0.5",
-    "voxel-critter": "0.x.x"
+    "voxel-critter": "0.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
