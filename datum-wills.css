@@ -19,6 +19,12 @@
         top: 20px;
       }
 
+      .bottom-left {
+        position: absolute;
+        left: 20px;
+        bottom: 50px;
+      }
+
       .bottom-half {
         top: 50%;
       }
