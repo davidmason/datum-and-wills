@@ -11,6 +11,7 @@
     "spatial-trigger": "0.0.x",
     "painterly-textures": "0.x.x",
     "voxel-player": "0.1.x",
+    "voxel-walk": "0.0.5",
     "voxel-critter": "0.x.x"
   },
   "scripts": {
