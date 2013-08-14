@@ -1,39 +1,56 @@
       body {
         font-family: Monospace;
-        font-size: 12px;
         background-color: #f0f0f0;
         margin: 0px;
         overflow: hidden;
       }
 
-      .source-on-github, .source-on-github:visited {
-        color: #0099dd;
+      .absolute-center {
+        margin: auto;
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+        display: table;
+        height: auto;
+      }
+
+      .top-left {
         position: absolute;
         left: 20px;
         top: 20px;
-        font-size: 1.2em;
-        background-color: rgba(0, 0, 0, 0.4);
-        padding: 5px;
-        border-radius: 3px;
-        text-decoration: none;
+      }
+
+      .bottom-half {
+        top: 50%;
+      }
+
+      .top-half {
+        bottom: 50%;
+      }
+
+      .width-1-4th {
+        width: 50%;
       }
 
       .text-overlay {
-        background-color: rgba(0, 0, 0, 0.3);
-        position: absolute;
-        left: 400px;
-        font-size: 2em;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6);
         padding: 8px;
-        display: none;
+        font-size: 2em;
+        border-radius: 3px;
+        text-align: center;
       }
 
-      .instruction-overlay {
-        bottom: 250px;
+      a.text-overlay, a:visited.text-overlay {
+        color: #0099dd;
+        text-decoration: none;
       }
 
-      .error-overlay {
+      .hidden {
+        z-index: -999;
+      }
+
+      .error {
         color: red;
-        bottom: 200px;
       }
 
       .accordion {

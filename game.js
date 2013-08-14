@@ -11,8 +11,8 @@ var createGame = require('voxel-engine')
 var hud = {}
 window.hud = hud;
 
-hud.instructionOverlay = document.querySelector('.instruction-overlay');
-hud.errorOverlay = document.querySelector('.error-overlay');
+hud.instructionOverlay = document.querySelector('#instruction');
+hud.errorOverlay = document.querySelector('#error');
 hud.tutorial = document.querySelector('.accordion');
 hud.walkTutorial = document.getElementsByClassName('accordion-item')[0];
 hud.jumpTutorial = document.getElementsByClassName('accordion-item')[1];
@@ -81,7 +81,7 @@ hud.bindAccordionItems();
 
 hud.showInstruction = function (message) {
   var overlay = hud.instructionOverlay
-  overlay.style.display = 'block';
+  overlay.classList.remove('hidden');
   overlay.innerText = message;
   if (hud.clearInstructionsTimeout)
     hud.clearInstructionsTimeout = null
@@ -90,12 +90,12 @@ hud.showInstruction = function (message) {
 
 hud.clearInstructions = function () {
   hud.clearInstructionsTimeout = null;
-  hud.instructionOverlay.style.display = 'none';
+  hud.instructionOverlay.classList.add('hidden');
 }
 
 hud.showError = function (message) {
   var errorOverlay = hud.errorOverlay;
-  errorOverlay.style.display = 'block';
+  errorOverlay.classList.remove('hidden');
   errorOverlay.innerText = message;
   setTimeout(hud.showTutorials, 2200)
   if (hud.clearErrorTimeoutHandle)
@@ -115,7 +115,7 @@ hud.showJumpTutorial = function () {
 
 hud.clearError = function () {
   hud.clearErrorTimeoutHandle = null;
-  hud.errorOverlay.style.display = 'none';
+  hud.errorOverlay.classList.add('hidden');
 }
 
 hud.decorateCircuits = function () {
