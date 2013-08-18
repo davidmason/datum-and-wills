@@ -5,6 +5,9 @@ module.exports = function(grunt) {
       'build/game-browserified.js': ['game.js']
     },
     jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
       files: {
         src: 'game.js'
       }
@@ -21,5 +24,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['browserify', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'browserify', 'uglify']);
+
+  grunt.registerTask('thingy', 'whatever', function () {
+    grunt.log.write('I am writing something to the console...').ok().error();
+  });
 };

@@ -1,0 +1,23 @@
+{
+    "asi": true,
+    "laxcomma": true,
+
+    "browser": true,
+    "node": true,
+
+    "eqeqeq": true,
+    "onevar": true,
+    "noarg": true,
+    "latedef": "nofunc",
+    "undef": true,
+    "unused": true,
+    "multistr": true,
+
+    "curly": true,
+    "eqnull": true,
+    "expr": true,
+    "trailing": true,
+    "indent": 2,
+
+    "evil": true
+}
