@@ -17,12 +17,23 @@ module.exports = function(grunt) {
         banner: '/* <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       'build/game-min.js': 'build/game-browserified.js'
+    },
+    watch: {
+      scripts: {
+        files: ['game.js'],
+        tasks: ['default'],
+        options: {
+          spawn: true,
+          interrupt: true
+        },
+      },
     }
   });
 
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['jshint', 'browserify', 'uglify']);
 

@@ -278,12 +278,12 @@ trigger(game.spatial, triggers.atStrafeObstacle).on('enter', function () {
 });
 
 
-function drawTriggers() {
+
+(function drawTriggers () {
   for (var triggerName in triggers) {
     game.addAABBMarker(triggers[triggerName]);
   }
-}
-drawTriggers();
+});
 
 
 var critterCreator = require('voxel-critter')(game);
