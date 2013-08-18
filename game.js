@@ -160,21 +160,21 @@ code.moveForwardWrapper = function(target, speed, dt) {
   } catch(e) {
     code.handleWalkError(e);
   }
-}
+};
 
 code.handleWalkError = function (e) {
   hud.walkError.innerText = e.message;
   hud.walkError.style.display = 'block';
-}
+};
 
 code.inert = function () {
   console.log('not implemented');
-}
+};
 
 code.jumpError = function () {
   hud.showError("Error! Jumping circuit broken!");
   setTimeout(hud.showJumpTutorial, 2000);
-}
+};
 
 code.jump = code.inert;
 
@@ -196,24 +196,24 @@ code.jumpWrapper = function(target, dt) {
   } catch(e) {
     code.handleJumpError(e);
   }
-}
+};
 
 code.handleJumpError = function(e) {
   hud.jumpError.innerText = e.message;
   hud.jumpError.style.display = 'block';
-}
+};
 
 
 world.Material = {
-    SKY: 0
-  , GRASS: 1
-  , BRICK: 2
-  , DIRT: 3
-  }
+    SKY: 0,
+    GRASS: 1,
+    BRICK: 2,
+    DIRT: 3
+  };
 
 var coordinatesInRange = function (x, z, range) {
     return x < range && x > -range && z < range && z > -range;
-  }
+  };
 
 var dirtColumnWithBrickCube = function(x, y, z) {
     var Material = world.Material,
@@ -230,12 +230,12 @@ var dirtColumnWithBrickCube = function(x, y, z) {
     if (surface && inRange) { return Material.GRASS; }
     if (underground && inRange) { return Material.DIRT; }
     return Material.SKY;
-  }
+  };
 
 var game = createGame({
-  texturePath: texturePath
-, generate: dirtColumnWithBrickCube
-, controls: {
+  texturePath: texturePath,
+  generate: dirtColumnWithBrickCube,
+  controls: {
     moveForward: code.moveForwardWrapper,
     jump: code.jumpWrapper
   }
@@ -243,44 +243,44 @@ var game = createGame({
 game.appendTo(document.body);
 window.game = game; // for easy debugging
 
-var createPlayer = player(game)
-var avatar = createPlayer('player.png')
-avatar.pov(3)
-avatar.possess()
-avatar.yaw.position.set(0, 2, 10)
+var createPlayer = player(game);
+var avatar = createPlayer('player.png');
+avatar.pov(3);
+avatar.possess();
+avatar.yaw.position.set(0, 2, 10);
 
 game.on('tick', function() {
-  walk.render(avatar.playerSkin)
+  walk.render(avatar.playerSkin);
   var vx = Math.abs(avatar.velocity.x),
-      vz = Math.abs(avatar.velocity.z)
-  if (vx > 0.001 || vz > 0.001) { walk.stopWalking() }
-  else { walk.startWalking() }
-})
+      vz = Math.abs(avatar.velocity.z);
+  if (vx > 0.001 || vz > 0.001) { walk.stopWalking(); }
+  else { walk.startWalking(); }
+});
 
 
 var triggers = {
-    atJumpObstacle: aabb([-5, 1, 6], [11, 1, 3])
-  , atStrafeObstacle: aabb([-5, 3, 0], [11, 1, 6])
-  }
-window.triggers = triggers
+    atJumpObstacle: aabb([-5, 1, 6], [11, 1, 3]),
+    atStrafeObstacle: aabb([-5, 3, 0], [11, 1, 6])
+  };
+window.triggers = triggers;
 
 trigger(game.spatial, triggers.atJumpObstacle).on('enter', function() {
-  hud.walkTutorial.classList.add('complete')
-  hud.showInstruction('Press [spacebar] to jump')
+  hud.walkTutorial.classList.add('complete');
+  hud.showInstruction('Press [spacebar] to jump');
   if (code.jump === code.inert) {
-    code.jump = code.jumpError
+    code.jump = code.jumpError;
   }
-})
+});
 
 trigger(game.spatial, triggers.atStrafeObstacle).on('enter', function () {
-  hud.jumpTutorial.classList.add('complete')
+  hud.jumpTutorial.classList.add('complete');
   // TODO next challenge
-})
+});
 
 
 function drawTriggers() {
   for (var triggerName in triggers) {
-    game.addAABBMarker(triggers[triggerName])
+    game.addAABBMarker(triggers[triggerName]);
   }
 }
 drawTriggers();
