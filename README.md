@@ -3,6 +3,10 @@ datum-and-wills
 
 A narative browser-based voxel game that aims to introduce and teach javascript coding interactively.
 
+# Playable Prototype
+
+[Try the prototype here](http://www.proto.pixelaped.com/datum-and-wills/datum-wills.html).
+
 
 # Installation
 
