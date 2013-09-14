@@ -6,21 +6,12 @@ var createGame = require('voxel-engine'),
     walk = require('voxel-walk'),
 
 
+    hud = require('./lib/hud.js'),
     world = {},
-    hud = {},
     code = {};
 
-window.hud = hud;
 
-hud.instructionOverlay = document.querySelector('#instruction');
-hud.errorOverlay = document.querySelector('#error');
-hud.tutorial = document.querySelector('.accordion');
-hud.walkTutorial = document.getElementsByClassName('accordion-item')[0];
-hud.jumpTutorial = document.getElementsByClassName('accordion-item')[1];
-hud.walkError = document.getElementById('walk-error');
-hud.jumpError = document.getElementById('jump-error');
 
-hud.walkCircuit = document.getElementById('walk-circuit');
 hud.walkCircuit.onchange = function() {
   console.log('updating moveForward');
   // FIXME could be this.value
@@ -37,7 +28,6 @@ hud.walkCircuit.onchange = function() {
 };
 
 // TODO de-duplicate handling of walk and jump here
-hud.jumpCircuit = document.querySelector('#jump-circuit');
 hud.jumpCircuit.onchange = function() {
   console.log('updating jump');
   var jump, funcString, functionBody = hud.jumpCircuit.value;
@@ -53,90 +43,6 @@ hud.jumpCircuit.onchange = function() {
     code.handleJumpError(e);
   }
 };
-
-hud.bindAccordionItems = function () {
-  hud.accordion = document.querySelector('.accordion');
-  hud.accordionItems = hud.accordion.querySelectorAll('.accordion-item');
-  hud.accordion.collapseAll = function () {
-    var i, items = this.querySelectorAll('.accordion-item');
-    for (i = 0; i < items.length; i++) {
-      items[i].classList.remove('active');
-    }
-  };
-  var i, item, toggleAccordionItem;
-
-  toggleAccordionItem = function () {
-    var parent = this.parentElement;
-    if (parent.classList.contains('active')) {
-      parent.classList.remove('active');
-    } else {
-      hud.accordion.collapseAll();
-      parent.classList.add('active');
-    }
-  };
-  for (i = 0; i < hud.accordionItems.length; i++) {
-    item = hud.accordionItems[i];
-    item.querySelector('.accordion-title').onclick = toggleAccordionItem;
-  }
-};
-
-hud.bindAccordionItems();
-
-hud.showInstruction = function (message) {
-  var overlay = hud.instructionOverlay;
-  overlay.classList.remove('hidden');
-  overlay.innerText = message;
-  if (hud.clearInstructionsTimeout) {
-    hud.clearInstructionsTimeout = null;
-  }
-  hud.clearInstructionsTimeout = setTimeout(hud.clearInstructions, 4000);
-};
-
-hud.clearInstructions = function () {
-  hud.clearInstructionsTimeout = null;
-  hud.instructionOverlay.classList.add('hidden');
-};
-
-hud.showError = function (message) {
-  var errorOverlay = hud.errorOverlay;
-  errorOverlay.classList.remove('hidden');
-  errorOverlay.innerText = message;
-  setTimeout(hud.showTutorials, 2200);
-  if (hud.clearErrorTimeoutHandle) {
-    clearTimeout(hud.clearErrorTimeoutHandle);
-  }
-  hud.clearErrorTimeoutHandle = setTimeout(hud.clearError, 2000);
-};
-
-hud.showTutorials = function () {
-  hud.tutorial.style.display = 'block';
-};
-
-hud.showJumpTutorial = function () {
-  hud.jumpTutorial.classList.remove('hidden');
-  hud.accordion.collapseAll();
-  hud.jumpTutorial.classList.add('active');
-};
-
-hud.clearError = function () {
-  hud.clearErrorTimeoutHandle = null;
-  hud.errorOverlay.classList.add('hidden');
-};
-
-hud.decorateCircuits = function () {
-  var i, status, circuit, circuits;
-  circuits = document.getElementsByClassName('circuit');
-  for (i = 0; i < circuits.length; i++) {
-    circuit = circuits[i];
-    status = circuit.insertBefore(document.createElement('div'), circuit.firstChild);
-    status.className = 'status';
-    status = circuit.appendChild(document.createElement('div'));
-    status.className = 'status';
-  }
-};
-
-hud.decorateCircuits();
-
 
 
 code.moveForwardError = function() {
@@ -241,7 +147,6 @@ var game = createGame({
   }
 });
 game.appendTo(document.body);
-window.game = game; // for easy debugging
 
 var createPlayer = player(game);
 var avatar = createPlayer('player.png');
@@ -262,7 +167,7 @@ var triggers = {
     atJumpObstacle: aabb([-5, 1, 6], [11, 1, 3]),
     atStrafeObstacle: aabb([-5, 3, 0], [11, 1, 6])
   };
-window.triggers = triggers;
+triggers = triggers;
 
 trigger(game.spatial, triggers.atJumpObstacle).on('enter', function() {
   hud.walkTutorial.classList.add('complete');

@@ -20,7 +20,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: ['game.js'],
+        files: ['game.js', 'lib/*.js'],
         tasks: ['default'],
         options: {
           spawn: true,
