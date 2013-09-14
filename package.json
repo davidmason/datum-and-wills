@@ -1,7 +1,7 @@
 {
   "name": "datum-and-wills",
   "version": "0.0.0",
-  "description": "A narative browser-based voxel game that aims to introduce and teach javascript coding interactively",
+  "description": "A narrative browser-based voxel game that aims to introduce and teach javascript coding interactively",
   "main": "index.js",
   "dependencies": {
     "voxel-engine": "git://github.com/davidmason/voxel-engine.git#master",
