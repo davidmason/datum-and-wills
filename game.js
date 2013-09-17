@@ -7,9 +7,8 @@ var createGame = require('voxel-engine'),
 
 
     hud = require('./lib/hud.js'),
-    world = {},
+    generateWorld = require('./lib/generate-world.js'),
     code = {};
-
 
 
 hud.walkCircuit.onchange = function() {
@@ -109,38 +108,9 @@ code.handleJumpError = function(e) {
   hud.jumpError.style.display = 'block';
 };
 
-
-world.Material = {
-    SKY: 0,
-    GRASS: 1,
-    BRICK: 2,
-    DIRT: 3
-  };
-
-var coordinatesInRange = function (x, z, range) {
-    return x < range && x > -range && z < range && z > -range;
-  };
-
-var dirtColumnWithBrickCube = function(x, y, z) {
-    var Material = world.Material,
-        canyonWall = (x > 5 || x < -5) && y > 0 && y < 10,
-        inMiddle = coordinatesInRange(x, z, 6),
-        inRange = coordinatesInRange(x, z, 30),
-        underground = y < 0,
-        surface = y === 0,
-        aboveGround = y > 0,
-        highUp = y > 2;
-
-    if (canyonWall && inRange) { return Material.DIRT; }
-    if (inMiddle && aboveGround && !highUp) { return Material.DIRT; }
-    if (surface && inRange) { return Material.GRASS; }
-    if (underground && inRange) { return Material.DIRT; }
-    return Material.SKY;
-  };
-
 var game = createGame({
   texturePath: texturePath,
-  generate: dirtColumnWithBrickCube,
+  generate: generateWorld,
   controls: {
     moveForward: code.moveForwardWrapper,
     jump: code.jumpWrapper
@@ -148,6 +118,9 @@ var game = createGame({
 });
 game.appendTo(document.body);
 
+
+// TODO move player creation and walking to separate script - only needs game
+//      and can require walk from there.
 var createPlayer = player(game);
 var avatar = createPlayer('player.png');
 avatar.pov(3);
