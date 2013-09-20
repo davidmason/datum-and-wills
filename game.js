@@ -32,9 +32,7 @@ hud.jumpCircuit.onchange = function() {
   var jump, funcString, functionBody = hud.jumpCircuit.value;
   try {
     funcString = "jump = function (robot, dt) {" + functionBody + "}";
-    console.log(funcString);
     eval(funcString);
-    console.log(jump);
     code.jump = jump;
     hud.jumpError.style.display = 'none';
     hud.jumpError.innerText = '';
